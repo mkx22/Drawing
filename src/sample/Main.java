@@ -16,12 +16,12 @@ import java.awt.*;
 public class Main extends Application {
 
     @Override
-    public void start(Stage primaryStage) throws Exception{
+    public void start(Stage primaryStage) throws Exception {
         //Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
 
-        DrawBoard drawBoard=new DrawBoard();
+        DrawBoard drawBoard = new DrawBoard();
 
-        final Scene scene=new Scene(drawBoard,300,275, Color.WHITE);
+        final Scene scene = new Scene(drawBoard, 300, 275, Color.WHITE);
         drawBoard.load();
 
         primaryStage.setScene(scene);

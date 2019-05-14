@@ -10,62 +10,74 @@ public class MyShape {
     protected double endX;
     protected double endY;
     protected String name;
+    protected int index;
 
-    public MyShape(){
-        startX=0;
-        startY =0;
-        endX =0;
-        endY =0;
-        name="name";
+    public MyShape() {
+        startX = 0;
+        startY = 0;
+        endX = 0;
+        endY = 0;
+        name = "name";
     }
 
-    public MyShape(double x1,double y1,double x2,double y2) {
+    public MyShape(double x1, double y1, double x2, double y2) {
         startX = x1;
         startY = y1;
         endX = x2;
         endY = y2;
-        name="name";
+        name = "name";
     }
 
     //画图
-    public Shape create() { return null; }
+    public Shape create() {
+        return null;
+    }
 
-    public double getStartX(){
+    public double getStartX() {
         return startX;
     }
 
-    public double getStartY(){
+    public double getStartY() {
         return startY;
     }
 
-    public double getEndX(){
+    public double getEndX() {
         return endX;
     }
 
-    public double getEndY(){
+    public double getEndY() {
         return endY;
     }
 
-    public String getName(){
+    public String getName() {
         return name;
     }
 
-    public void setName(String name1){
-        name=name1;
-    }
-    public void setStartX(double x){
-        startX=x;
+    public void setName(String name1) {
+        name = name1;
     }
 
-    public void setStartY(double y){
-        startY =y;
+    public void setStartX(double x) {
+        startX = x;
     }
 
-    public void setEndX(double x){
-        endX =x;
+    public void setStartY(double y) {
+        startY = y;
     }
 
-    public void setEndY(double y){
-        endY =y;
+    public void setEndX(double x) {
+        endX = x;
+    }
+
+    public void setEndY(double y) {
+        endY = y;
+    }
+
+    public void setIndex(int index1) {
+        index = index1;
+    }
+    public int getIndex(){
+        return index;
     }
 }
+
