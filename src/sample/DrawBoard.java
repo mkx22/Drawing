@@ -399,7 +399,7 @@ public class DrawBoard extends Group {
         if (name == "line") {
             if (tmpS.contains(sx, sy) && tmpS.contains(ex, ey))
                 return true;
-        }else if (name == "rectangle" || name == "rectangle3") {
+        } else if (name == "rectangle" || name == "rectangle3") {
             double width = Math.abs(ex - sx), height = Math.abs(ey - sy);
             double fx = Math.min(sx, ex), fy = Math.min(sy, ey);
             if (tmpS.contains(fx, fy) && tmpS.contains(fx + height, fy) &&
@@ -407,11 +407,17 @@ public class DrawBoard extends Group {
                     tmpS.contains(fx + height, fy + width)) {
                 return true;
             }
-        } else if(name=="triangle"||name=="triangle2"){
+        } else if (name == "triangle" || name == "triangle2") {
+            double tx1 = sx + (ex - sx) / 2, ty1 = sy, tx2 = sx, ty2 = ey, tx3 = ex, ty3 = ey;
+            if (tmpS.contains(tx1, ty1) && tmpS.contains(tx2, ty2) && tmpS.contains(tx3, ty3))
+                return true;
 
-        } else if(name=="circle"||name=="circle2"){
+        } else if (name == "circle" || name == "circle2") {
+            double centerX = sx + (ex - sx) / 2, centerY = sy + (ey - sy) / 2, radius = Math.abs(ex - sx) / 2;
 
-        }else if(name=="ellipse"||name=="ellipse"){
+        } else if (name == "ellipse" || name == "ellipse") {
+            double centerX = sx + (ex - sx) / 2, centerY = sy + (ey - sy) / 2,
+                    radiusX = Math.abs(ex - sx) / 2, radiusY = Math.abs(ey - sy) / 2;
 
         }
         return false;
@@ -429,7 +435,7 @@ public class DrawBoard extends Group {
         //遍历之前的图形
         for (i = 0; i < myshapes.size(); i++) {
             MyShape myshape = myshapes.get(i);
-
+            System.out.print(" "+myshape.getName());
             //包含该图形且非组合图形
             if (ifContain(x1, y1, x2, y2, myshape) && operates.get(i) >= 0) {
                 myUnion.addTmpshapes(myshape);
