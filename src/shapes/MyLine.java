@@ -12,13 +12,13 @@ public class MyLine extends MyShape {
         name = "line";
     }
 
-    public Shape create() {
+    public Shape create(double stroke) {
         Line line = new Line();
         line.setStartX(startX);
         line.setStartY(startY);
         line.setEndX(endX);
         line.setEndY(endY);
-        line.setStrokeWidth(2.0);
+        line.setStrokeWidth(stroke);
         return line;
     }
 

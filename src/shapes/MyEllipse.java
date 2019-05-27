@@ -47,14 +47,14 @@ public class MyEllipse extends MyShape {
         return radiusY;
     }
 
-    public Shape create() {
+    public Shape create(double stroke) {
         Ellipse ellipse = new Ellipse();
         ellipse.setCenterX(centerX);
         ellipse.setCenterY(centerY);
         ellipse.setRadiusX(radiusX);
         ellipse.setRadiusY(radiusY);
         ellipse.setStroke(Color.BLACK);
-        ellipse.setStrokeWidth(2.0);
+        ellipse.setStrokeWidth(stroke);
         ellipse.setFill(null);
         return ellipse;
     }

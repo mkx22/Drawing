@@ -42,14 +42,14 @@ public class MyCircle extends MyShape {
         return radius;
     }
 
-    public Shape create() {
+    public Shape create(double stroke) {
         Circle circle = new Circle();
 //        System.out.print("\n"+centerX+' '+centerX+' '+radius);
         circle.setCenterX(centerX);
         circle.setCenterY(centerY);
         circle.setRadius(radius);
         circle.setStroke(Color.BLACK);
-        circle.setStrokeWidth(2.0);
+        circle.setStrokeWidth(stroke);
         circle.setFill(null);
         return circle;
     }

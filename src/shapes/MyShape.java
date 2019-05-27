@@ -11,6 +11,7 @@ public class MyShape {
     protected double endY;
     protected String name;
     protected int index;
+    protected double stroke;
 
     public MyShape() {
         startX = 0;
@@ -18,6 +19,7 @@ public class MyShape {
         endX = 0;
         endY = 0;
         name = "name";
+        stroke = 2.0;
     }
 
     public MyShape(double x1, double y1, double x2, double y2) {
@@ -26,10 +28,14 @@ public class MyShape {
         endX = x2;
         endY = y2;
         name = "name";
+        stroke = 2.0;
     }
 
     //画图
-    public Shape create() {
+    public Shape create(double stroke) {
+        return null;
+    }
+    public Shape create1() {
         return null;
     }
 
@@ -53,8 +59,16 @@ public class MyShape {
         return name;
     }
 
+    public double getStroke() {
+        return stroke;
+    }
+
     public void setName(String name1) {
         name = name1;
+    }
+
+    public void setStroke(double stroke1) {
+        stroke = stroke1;
     }
 
     public void setStartX(double x) {
@@ -76,7 +90,8 @@ public class MyShape {
     public void setIndex(int index1) {
         index = index1;
     }
-    public int getIndex(){
+
+    public int getIndex() {
         return index;
     }
 }

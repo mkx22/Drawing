@@ -57,11 +57,11 @@ public class MyTriangle extends MyShape {
         return y3;
     }
 
-    public Shape create() {
+    public Shape create(double stroke) {
         Polygon polygon = new Polygon();
         polygon.getPoints().addAll(new Double[]{x1, y1, x2, y2, x3, y3});
         polygon.setStroke(Color.BLACK);
-        polygon.setStrokeWidth(2.0);
+        polygon.setStrokeWidth(stroke);
         polygon.setFill(null);
         return polygon;
     }

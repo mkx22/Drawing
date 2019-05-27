@@ -60,14 +60,14 @@ public class MyRectangle extends MyShape {
         return fy;
     }
 
-    public Shape create() {
+    public Shape create(double stroke) {
         Rectangle rectangle = new Rectangle();
         rectangle.setX(fx);
         rectangle.setY(fy);
         rectangle.setWidth(width);
         rectangle.setHeight(height);
         rectangle.setStroke(Color.BLACK);
-        rectangle.setStrokeWidth(2.0);
+        rectangle.setStrokeWidth(stroke);
         rectangle.setFill(null);
         return rectangle;
     }

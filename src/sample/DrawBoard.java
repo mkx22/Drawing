@@ -1,54 +1,132 @@
 package sample;
 
-import javafx.event.ActionEvent;
+import javafx.application.Platform;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToolBar;
+import javafx.scene.SnapshotParameters;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import shapes.*;
 
+import javax.imageio.ImageIO;
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-
-import static javafx.scene.shape.Shape.union;
+import java.util.Date;
 
 public class DrawBoard extends Group {
 
     private double x1, y1, x2, y2;
+    private double stroke = 2.0;
+
     int copyI = -1;
     ArrayList<Shape> shapes = new ArrayList<>();
     ArrayList<MyShape> myshapes = new ArrayList<>();
     ArrayList<Integer> operates = new ArrayList<>();
 
-    private enum Shapes {
-        CIRCLE,
-        ELLIPSE,
-        LINE,
-        RECTANGLE,
-        TEXT,
-        TRIANGLE;
-    }
+    Group group = new Group();
 
     public DrawBoard() {
 
 
     }
 
-    public void load() {
-        addToolbar();
+
+    public void loadBoard(Stage primaryStage) {
+        getChildren().add(group);
+        getChildren().add(addPane(primaryStage));
     }
 
-    public void addToolbar() {
+    public void save() {
+
+        WritableImage image = group.snapshot(new SnapshotParameters(), null);
+        try {
+            Date date = new Date();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss");
+            String url = sdf.format(date) + ".png";
+            ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", new File(url));
+            System.out.println("保存成功");
+        } catch (
+                IOException ex) {
+            System.out.println("保存失败:" + ex.getMessage());
+        }
+    }
+
+    public void load(Stage primaryStage) {
+        FileChooser fileChooser = new FileChooser();
+        File file = fileChooser.showOpenDialog(primaryStage);
+        try {
+            String path = file.getPath();
+
+            Image image = new Image("file:" + path);
+            Canvas canvas = new Canvas(image.getWidth(), image.getHeight());
+            GraphicsContext gc = canvas.getGraphicsContext2D();
+            group.getChildren().add(canvas);
+            gc.drawImage(image, 0, 0);
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    void refresh(){
+        myshapes.clear();
+        shapes.clear();
+        operates.clear();
+        group.getChildren().clear();
+    }
+
+    public BorderPane addPane(Stage primaryStage) {
+        BorderPane borderPane = new BorderPane();
+        borderPane.setTop(addMenuBar(primaryStage));
+        borderPane.setCenter(addToolbar());
+        return borderPane;
+
+    }
+
+    public MenuBar addMenuBar(Stage primaryStage) {
+
+        MenuBar menuBar = new MenuBar();
+        menuBar.prefWidthProperty().bind(primaryStage.widthProperty());
+        addMenu(menuBar, primaryStage);
+        return menuBar;
+
+    }
+
+    public void addMenu(MenuBar menuBar, Stage primaryStage) {
+        Menu fileMenu = new Menu("File");
+        MenuItem menuItem_new = new MenuItem("New");
+        MenuItem menuItem_save = new MenuItem("Save");
+        MenuItem menuItem_load = new MenuItem("Load");
+        MenuItem menuItem_exit = new MenuItem("Exit");
+        menuItem_exit.setOnAction(actionEvent -> Platform.exit());
+        menuItem_new.setOnAction(actionEvent -> refresh());
+        menuItem_save.setOnAction(actionEvent -> save());
+        menuItem_load.setOnAction(actionEvent -> load(primaryStage));
+
+        Menu editMenu = new Menu("Edit");
+        Menu viewMenu = new Menu("View");
+
+        fileMenu.getItems().addAll(menuItem_new, menuItem_save, menuItem_load,
+                new SeparatorMenuItem(), menuItem_exit);
+        menuBar.getMenus().addAll(fileMenu, editMenu, viewMenu);
+    }
+
+    public ToolBar addToolbar() {
         ToolBar toolBar = new ToolBar();
         addButton(toolBar, "undo");
         addButton(toolBar, "circle");
@@ -63,12 +141,13 @@ public class DrawBoard extends Group {
         addButton(toolBar, "select");
         addButton(toolBar, "copy");
         addButton(toolBar, "paste");
+        addButton(toolBar, "stroke1");
+        addButton(toolBar, "stroke2");
+        addButton(toolBar, "stroke3");
+        addButton(toolBar, "stroke4");
 
-//        copyButton(toolBar);
-//        pasteButton(toolBar);
         addText(toolBar);
-        getChildren().addAll(toolBar);
-
+        return toolBar;
     }
 
     public void addButton(ToolBar toolBar, String string) {
@@ -86,17 +165,35 @@ public class DrawBoard extends Group {
             @Override
             public void handle(MouseEvent event) {
                 System.out.print("\n" + string + ":\n");
+                nullButton();
                 if (string == "copy") {
-                    copy();
-                } else if (string == "paste")
-                    paste();
 
-                else if (string == "undo")
+                    copy();
+                } else if (string == "paste") {
+                    paste();
+                } else if (string == "undo") {
                     undo();
-                else if (string == "select")
+                } else if (string == "select") {
                     select();
-                else
-                    getShape(string);
+                } else if (string == "stroke1") {
+                    stroke = 1.0;
+                } else if (string == "stroke2") {
+                    stroke = 2.0;
+                } else if (string == "stroke3") {
+                    stroke = 3.0;
+                } else if (string == "stroke4") {
+                    stroke = 4.0;
+                } else if (string == "circle" ||
+                        string == "circle2" ||
+                        string == "ellipse" ||
+                        string == "ellipse2" ||
+                        string == "line" ||
+                        string == "rectangle" ||
+                        string == "rectangle3" ||
+                        string == "triangle" ||
+                        string == "triangle2") {
+                    drawShape(string);
+                }
             }
         });
 
@@ -110,6 +207,7 @@ public class DrawBoard extends Group {
         toolBar.getItems().add(button);
     }
 
+
     public void nullButton() {
         getScene().setOnMousePressed(null);
         getScene().setOnMouseReleased(null);
@@ -117,11 +215,12 @@ public class DrawBoard extends Group {
     }
 
     //画图
-    public void getShape(String string) {
-        //getShape
+    public void drawShape(String string) {
+        //drawShape
         getScene().setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
+                //nullButton();
                 x1 = event.getScreenX();
                 y1 = event.getScreenY();
                 System.out.print(" pressed:x1=" + x1);
@@ -138,7 +237,7 @@ public class DrawBoard extends Group {
                 System.out.print(" released:y2=" + y2);
                 System.out.print("\n");
                 draw(string, x1, y1, x2, y2, true);
-                nullButton();
+                //nullButton();
             }
 
         });
@@ -162,7 +261,7 @@ public class DrawBoard extends Group {
     }
 
     public void draw(String string, double x1, double y1, double x2, double y2, boolean flag) {
-        System.out.print(" draw" + string + "\n");
+        System.out.print(" draw " + string + "\n");
 
         if (string == "circle") {
             MyCircle shape = new MyCircle(x1, y1, x2, y2);
@@ -170,9 +269,9 @@ public class DrawBoard extends Group {
                 shape.setIndex(getIndex());
                 myshapes.add(shape);
             }
-            Shape shape1 = shape.create();
+            Shape shape1 = shape.create(stroke);
             shapes.add(shape1);
-            getChildren().add(shape1);
+            group.getChildren().add(shape1);
         } else if (string == "circle2") {
             MyCircle shape = new MyCircle(x1, y1, x2, y2);
             if (flag) {
@@ -181,16 +280,16 @@ public class DrawBoard extends Group {
             }
             Shape shape1 = shape.create1();
             shapes.add(shape1);
-            getChildren().add(shape1);
+            group.getChildren().add(shape1);
         } else if (string == "ellipse") {
             MyEllipse shape = new MyEllipse(x1, y1, x2, y2);
             if (flag) {
                 shape.setIndex(getIndex());
                 myshapes.add(shape);
             }
-            Shape shape1 = shape.create();
+            Shape shape1 = shape.create(stroke);
             shapes.add(shape1);
-            getChildren().add(shape1);
+            group.getChildren().add(shape1);
         } else if (string == "ellipse2") {
             MyEllipse shape = new MyEllipse(x1, y1, x2, y2);
             if (flag) {
@@ -199,25 +298,25 @@ public class DrawBoard extends Group {
             }
             Shape shape1 = shape.create1();
             shapes.add(shape1);
-            getChildren().add(shape1);
+            group.getChildren().add(shape1);
         } else if (string == "line") {
             MyLine shape = new MyLine(x1, y1, x2, y2);
             if (flag) {
                 shape.setIndex(getIndex());
                 myshapes.add(shape);
             }
-            Shape shape1 = shape.create();
+            Shape shape1 = shape.create(stroke);
             shapes.add(shape1);
-            getChildren().add(shape1);
+            group.getChildren().add(shape1);
         } else if (string == "rectangle") {
             MyRectangle shape = new MyRectangle(x1, y1, x2, y2);
             if (flag) {
                 shape.setIndex(getIndex());
                 myshapes.add(shape);
             }
-            Shape shape1 = shape.create();
+            Shape shape1 = shape.create(stroke);
             shapes.add(shape1);
-            getChildren().add(shape1);
+            group.getChildren().add(shape1);
         } else if (string == "rectangle3") {
             MyRectangle shape = new MyRectangle(x1, y1, x2, y2);
             if (flag) {
@@ -226,16 +325,16 @@ public class DrawBoard extends Group {
             }
             Shape shape1 = shape.create1();
             shapes.add(shape1);
-            getChildren().add(shape1);
+            group.getChildren().add(shape1);
         } else if (string == "triangle") {
             MyTriangle shape = new MyTriangle(x1, y1, x2, y2);
             if (flag) {
                 shape.setIndex(getIndex());
                 myshapes.add(shape);
             }
-            Shape shape1 = shape.create();
+            Shape shape1 = shape.create(stroke);
             shapes.add(shape1);
-            getChildren().add(shape1);
+            group.getChildren().add(shape1);
 
         } else if (string == "triangle2") {
             MyTriangle shape = new MyTriangle(x1, y1, x2, y2);
@@ -245,7 +344,7 @@ public class DrawBoard extends Group {
             }
             Shape shape1 = shape.create1();
             shapes.add(shape1);
-            getChildren().add(shape1);
+            group.getChildren().add(shape1);
         }
         if (flag) {
             operates.add(1);
@@ -264,11 +363,26 @@ public class DrawBoard extends Group {
     }
     //单击选中，拷贝复制
 
+    Label label1 =new Label("选中成功！~\\(≧▽≦)/~");
+    Label label2 =new Label("没有选中图形！(>_<)——空心图形线条越细越难选中哦");
+
     //未组合时选中图形默认为上层图形
     public void copy() {
+
         getScene().setOnMouseClicked(new EventHandler<MouseEvent>() {
+
             @Override
             public void handle(MouseEvent event) {
+                //nullButton();
+                if(getChildren().contains(label1)){
+                    getChildren().remove(label1);
+                    //System.out.print(" contain and remove ");
+                }
+                if(getChildren().contains(label2)){
+                    getChildren().remove(label2);
+                    //System.out.print(" contain and remove ");
+                }
+
                 x1 = event.getScreenX();
                 y1 = event.getScreenY();
                 System.out.print(" copyx1=" + x1);
@@ -277,16 +391,26 @@ public class DrawBoard extends Group {
                 for (i = shapes.size() - 1; i >= 0; i--) {
 
                     if (shapes.get(i).contains(x1, y1)) {
-                        System.out.print(" inShape!\n");
+//                        Alert alert=new Alert(Alert.AlertType.INFORMATION);
+//                        alert.titleProperty().set("提示");
+//                        alert.headerTextProperty().set("选中成功！~\\(≧▽≦)/~");
+//                        alert.show();
+                        label1.setLayoutX(200);
+                        label1.setLayoutY(5);
+                        getChildren().add(label1);
+//                        System.out.print(" inShape!\n");
                         copyI = i;
                         break;
                     }
                 }
                 if (i < 0) {
                     copyI = i;
+                    label2.setLayoutX(200);
+                    label2.setLayoutY(5);
+                    getChildren().add(label2);
                     System.out.print("\n");
                 }
-                nullButton();
+                //nullButton();
             }
         });
     }
@@ -298,7 +422,7 @@ public class DrawBoard extends Group {
             @Override
             public void handle(MouseEvent event) {
                 //遍历operates找copyI对应的myshape中的坐标并赋值给copyI
-
+                //nullButton();
                 int start = 0, end = operates.get(0);
 
                 for (int i = 0; i < operates.size(); i++) {
@@ -361,7 +485,7 @@ public class DrawBoard extends Group {
                         myshapes.add(myUnion);
                         operates.add(operates.get(copyI));
                     }
-                    nullButton();
+                    //nullButton();
                 }
             }
         });
@@ -372,6 +496,7 @@ public class DrawBoard extends Group {
         getScene().setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
+                //nullButton();
                 x1 = event.getScreenX();
                 y1 = event.getScreenY();
             }
@@ -383,7 +508,7 @@ public class DrawBoard extends Group {
                 x2 = event.getScreenX();
                 y2 = event.getScreenY();
                 unionShape(x1, y1, x2, y2);
-                nullButton();
+                //nullButton();
             }
 
         });
@@ -412,17 +537,20 @@ public class DrawBoard extends Group {
             if (tmpS.contains(tx1, ty1) && tmpS.contains(tx2, ty2) && tmpS.contains(tx3, ty3))
                 return true;
 
-        } else if (name == "circle" || name == "circle2") {
-            double centerX = sx + (ex - sx) / 2, centerY = sy + (ey - sy) / 2, radius = Math.abs(ex - sx) / 2;
-
-        } else if (name == "ellipse" || name == "ellipse") {
-            double centerX = sx + (ex - sx) / 2, centerY = sy + (ey - sy) / 2,
-                    radiusX = Math.abs(ex - sx) / 2, radiusY = Math.abs(ey - sy) / 2;
-
+        } else if (name == "circle" || name == "circle2" || name == "ellipse" || name == "ellipse") {
+            double centerX = sx + (ex - sx) / 2, centerY = sy + (ey - sy) / 2;
+            double radiusX = Math.abs(ex - sx) / 2, radiusY = Math.abs(ey - sy) / 2;
+            double cy1 = centerY + radiusY, cy2 = centerY - radiusY;
+            double cx1 = centerX - radiusX, cx2 = centerX + radiusX;
+            if (tmpS.contains(centerX, cy1) &&
+                    tmpS.contains(centerX, cy2) &&
+                    tmpS.contains(cx1, centerY) &&
+                    tmpS.contains(cx2, centerY)) {
+                return true;
+            }
         }
         return false;
     }
-
 
     public void unionShape(double x1, double y1, double x2, double y2) {
         int i = 0;
@@ -435,9 +563,9 @@ public class DrawBoard extends Group {
         //遍历之前的图形
         for (i = 0; i < myshapes.size(); i++) {
             MyShape myshape = myshapes.get(i);
-            System.out.print(" "+myshape.getName());
+            System.out.print(" " + myshape.getName());
             //包含该图形且非组合图形
-            if (ifContain(x1, y1, x2, y2, myshape) && operates.get(i) >= 0) {
+            if (operates.get(i) == 1 && ifContain(x1, y1, x2, y2, myshape)) {
                 myUnion.addTmpshapes(myshape);
                 System.out.print(" Contain! " + myshape.getName() + "\n");
             }
@@ -446,12 +574,12 @@ public class DrawBoard extends Group {
         if (myUnion.getTmpshapes().isEmpty())
             return;
 
-        //为了标识
-        Shape shape = myRectangle.create1();
-        shape.setStroke(Color.BLACK);
-        shape.setStrokeWidth(1.0);
-        shape.setFill(null);
-        //getChildren().add(shape);
+        // 为了标识
+//        Shape pointShape = myRectangle.create1();
+//        pointShape.setStroke(Color.BLACK);
+//        pointShape.setStrokeWidth(1.0);
+//        pointShape.setFill(null);
+//        getChildren().add(pointShape);
 
         // 增加进myshapes
         myUnion.setIndex(getIndex());
@@ -462,7 +590,7 @@ public class DrawBoard extends Group {
             return;
         myshapes.add(myUnion);
 
-        //画出组合图形
+        // 画出组合图形
         pasteArray.clear();
         for (i = 0; i < myUnion.getTmpshapes().size(); i++) {
             MyShape tmp = myUnion.getTmpshapes().get(i);
@@ -470,7 +598,6 @@ public class DrawBoard extends Group {
             //System.out.print(" pasteArray: add ");
             pasteArray.add(tmp);
         }
-
         //System.out.print(shape);
 
     }
@@ -479,11 +606,11 @@ public class DrawBoard extends Group {
     //也可支持多步撤销
     public void undo() {
         if (!shapes.isEmpty()) {
-            for (int i = 0; i < operates.get(operates.size()-1); i++) {
+            for (int i = 0; i < operates.get(operates.size() - 1); i++) {
                 Shape shape = shapes.get(shapes.size() - 1);
-                System.out.print(shape);
+                System.out.print(shape.toString());
                 shapes.remove(shapes.size() - 1);
-                getChildren().remove(shape);
+                group.getChildren().remove(shape);
             }
             myshapes.remove(myshapes.size() - 1);
             operates.remove(operates.size() - 1);
@@ -493,7 +620,8 @@ public class DrawBoard extends Group {
 
     //扩展功能
     //拖拽-重设x2，y2，先删后建
-    //getChildren().remove(node);
+
+    //group.getChildren().remove(node);
     //new
 
 
