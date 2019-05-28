@@ -294,15 +294,17 @@ public class DrawBoard extends Group {
     //文字描述
     public void addText(ToolBar toolBar) {
         TextField text = new TextField();
-        text.setText("");
-        text.clear();
+        TextBuilder builder=new TextBuilder();
+        MyText myText=builder.builderText();
+        text.setText(myText.getString());
+        //text.clear();
         toolBar.getItems().add(new Label("文字描述："));
         toolBar.getItems().add(text);
     }
     //单击选中，拷贝复制
 
     Label label1 =new Label("选中成功！~\\(≧▽≦)/~");
-    Label label2 =new Label("没有选中图形！(>_<)——空心图形请准确点击线条");
+    Label label2 =new Label("没有选中图形！(>_<)——空心图形请准确点击线条处");
 
     //未组合时选中图形默认为上层图形
     public void copy() {
@@ -329,10 +331,6 @@ public class DrawBoard extends Group {
                 for (i = shapes.size() - 1; i >= 0; i--) {
 
                     if (shapes.get(i).contains(x1, y1)) {
-//                        Alert alert=new Alert(Alert.AlertType.INFORMATION);
-//                        alert.titleProperty().set("提示");
-//                        alert.headerTextProperty().set("选中成功！~\\(≧▽≦)/~");
-//                        alert.show();
                         label1.setLayoutX(200);
                         label1.setLayoutY(5);
                         getChildren().add(label1);

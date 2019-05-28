@@ -7,7 +7,9 @@ import javafx.scene.text.Text;
 
 public class MyText extends MyShape {
 
-    String string;
+    private String string;
+    private Font font;
+    private Color color;
 
     public MyText() {
         endX = 20;
@@ -17,6 +19,30 @@ public class MyText extends MyShape {
 
     public MyText(String s) {
         string = s;
+    }
+
+    public void setString(String s) {
+        this.string = s;
+    }
+
+    public void setFont(Font font) {
+        this.font = font;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
+    }
+
+    public String getString() {
+        return string;
+    }
+
+    public Font getFont() {
+        return font;
+    }
+
+    public Color getColor() {
+        return color;
     }
 
     public void removeTmpshapes(MyShape myShape) {
@@ -32,21 +58,22 @@ public class MyText extends MyShape {
         return null;
     }
 
-    //    public Text create() {
-//        Text text = new Text();
-//        Font font = new Font(null, 32);
-//        text.setFont(font);
-//        text.setText(string);
-//        text.setX(endX);
-//        text.setY(endY);
-//        text.setFill(Color.RED);
-//        return text;
-//    }
+    public Text create() {
+        Text text = new Text();
+        Font font = new Font(null, 32);
+        text.setFont(getFont());
+        text.setText(getString());
+        text.setX(endX);
+        text.setY(endY);
+        text.setFill(getColor());
+        return text;
+    }
+
     public Shape create(double stroke) {
         return null;
     }
 
-    public Shape create1(){
+    public Shape create1() {
         return null;
     }
 }
