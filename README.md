@@ -195,6 +195,26 @@ public class TextBuilder {
 
 ## 界面展示
 * 运行源代码，出现一个小的窗口，此时需要放大至全屏，否则绘制图形位置不准确。
+![a](https://github.com/mkx22/Drawing/blob/master/report/1.png)
+* 放大至全屏后，可以看到菜单栏，点击菜单栏上的File，可以看到相关操作选项（Edit和View是为了美观加上去的，点了也没用...）
+![a](https://github.com/mkx22/Drawing/blob/master/report/2.png)
+  * 点击New：清空当前画板（原画布不会自动保存），创建一个新的画板
+  * 点击Save：保存当前画板上的图形
+  * 点击Load：会出现一个文件选择框，点击想要加载的图片文件进行加载即可，加载出来的图形有可能会被菜单栏和工具栏挡住= =
+  * 点击Exit：退出软件
+* 菜单栏下面是工具栏，从左到右依次是撤销、绘制图形（空心/实心）、组合、复制、粘贴、选择绘制线条粗细和文字描述
+![a](https://github.com/mkx22/Drawing/blob/master/report/3.png)
+  * 点击撤销：![a](https://github.com/mkx22/Drawing/blob/master/report/7.png)
+  * 点击图形：
+  * 点击组合：![a](https://github.com/mkx22/Drawing/blob/master/report/8.png)
+  * 点击复制粘贴：![a](https://github.com/mkx22/Drawing/blob/master/report/4.png)
+    * 复制（左边）：
+    * 粘贴（右边）：
+  * 点击文字描述：初始输入框上显示的是“一句话”，直接点击改动即可。
+  ![a](https://github.com/mkx22/Drawing/blob/master/report/6.png)
+
+
+
 
 
 
