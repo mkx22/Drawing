@@ -9,8 +9,10 @@
 ### UML建模
 
 ### 设计模式
-* 简单工厂模式  
-一开始
+* 简单工厂模式
+
+* 组合模式
+* 模式
 
 ## 实现方案
 
@@ -19,6 +21,83 @@
 ### 数据结构
 
 ### 设计模式实现
+#### 简单工厂模式  
+一开始
+
+* 静态工厂方法
+```javascript
+public class MyFactory {
+    public static MyShape createShape(String name, double x1, double y1, double x2, double y2) {
+        MyShape myShape = null;
+        switch (name) {
+            case "circle":
+            case "circle2":
+                myShape = new MyCircle(x1, y1, x2, y2);
+                break;
+            case "ellipse":
+            case "ellipse2":
+                myShape = new MyEllipse(x1, y1, x2, y2);
+                break;
+            //...
+        }
+        return myShape;
+    }
+}
+```
+
+* 客户端代码
+```javascript
+public class DrawBoard extends Group {
+    public void draw(String string, double x1, double y1, double x2, double y2, boolean flag) {
+        MyShape shape = MyFactory.createShape(string, x1, y1, x2, y2);
+        //...
+    }
+}
+```
+#### 组合模式  
+
+* 抽象构件：MyShape.java
+```javascript
+public abstract class MyShape {
+    public abstract void removeTmpshapes(MyShape myShape);
+    public abstract void addTmpshapes(MyShape myShape);
+    public abstract MyShape getChild(int i);
+}
+```
+* 叶子构件：MyLine.java
+```javascript
+public class MyLine extends MyShape {
+    public void removeTmpshapes(MyShape myShape) {
+        //异常处理或错误提示
+    }
+
+    public void addTmpshapes(MyShape myShape) {
+        //异常处理或错误提示
+    }
+
+    public MyShape getChild(int i) {
+        //异常处理或错误提示
+        return null;
+    }
+
+}
+```
+* 容器构件：MyUnion.java
+```javascript
+public class MyUnion extends MyShape {
+    ArrayList<MyShape> tmpshapes = new ArrayList<>();
+    public void removeTmpshapes(MyShape myShape){
+        tmpshapes.remove(myShape);
+    }
+    public void addTmpshapes(MyShape myShape){
+        tmpshapes.add(myShape);
+    }
+    public MyShape getChild(int i){
+        return (MyShape)tmpshapes.get(i);
+    }
+}
+```
+#### 模式  
 
 ## 实现功能介绍
 
