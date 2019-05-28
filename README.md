@@ -5,23 +5,52 @@
 本实验的目的在于实现一个画图软件，要求具备基本的画图、组合图形，复制粘贴、添加文字描述及撤销功能。实验中，我采用javaFX技术进行开发，通过其自带的图形类Shape对目标图形进行了构造，并通过画板类在界面上显示。
 
 ## 对目标系统的分析和设计
-因为实验要求是实现一个画图软件，所以一开始我决定用javaFX中的画布API进行实现，画布API可以通过创建一个Canvas对象，然后获得它的GraphicsContext，渲染自定义的形状，但是如果通过画布实现，每次撤销操作都必须对整块画布进行重绘，过于繁琐。所以最后我决定通过javaFX自带的Shape类，构造新的图形类MyShape，将其作为基类，目标图形作为它的派生类，通过类的实例化及相关函数对目标图形进行绘制。
+因为实验要求是实现一个画图软件，所以一开始我决定用javaFX中的画布API进行实现，画布API可以通过创建一个Canvas对象，然后获得它的GraphicsContext，渲染自定义的形状，但是如果通过画布实现，每次撤销操作都必须对整块画布进行重绘。所以最后我决定通过javaFX自带的Shape类，构造新的图形类MyShape，将其作为基类，目标图形作为它的派生类，通过类的实例化及相关函数对目标图形进行绘制。
 
 ### UML建模
-在设计时，我采用了简单工厂模式和组合模式等设计模式，因此在UML建模时，
+在设计时，我采用了简单工厂模式和组合模式等设计模式，因此在UML建模时也加入了这两种模式。
 ![a](https://github.com/mkx22/Drawing/blob/master/UML.png)
 ### 设计模式（详细代码见实现方案）
 * 简单工厂模式  
+一开始在构造图形时，不同的图形我用不同的派生类进行实例化，但如果使用简单工厂类，我只需要把我需要实例化的图形名作为参数传递给工厂，由工厂进行实现，不仅简化了代码，也使代码的封装性更好。
 * 组合模式  
-* 模式  
-
+基础功能中要求对组合功能进行实现，因此我使用类组合模式，将组合图形作为组合模式中的容器构件，基础图形作为叶子构件，方便同时操作单个对象和组合对象。
+* 建造者模式  
+一开始实现文本类时，我直接对文本的字体颜色进行了设置，之后我试着采用设计模式重新对其进行了构造。
 
 ## 实现方案
-
 ### 算法
-
+画图软件中，是由鼠标的点击拖动来画图的，因此图形的位置和大小是由鼠标点击和松开的位置坐标决定的，因此我用MyShape.java作为基类记录图形的起始坐标及终点坐标，再在派生类中计算大小并返回相应的图形，最后通过画板类实现绘制、复制粘贴、撤回等操作。
 ### 数据结构
+#### 类的介绍
+* MyShape.java   
+一个抽象类，作为所有图形的基类，记录图形的起始坐标以及终点坐标。
+* MyCircle.java、MyEllipse.java、MyLine.java、MyRectangle.java、MyText.java、MyTriangle.java、MyUnion.java  
+作为MyShape的派生类，负责基础图形、组合图形及文本框的实现。
+* MyFactory.java  
+静态工厂类，负责图形的创建。
+* DrawBoard.java  
+画板类，负责记录单击坐标位置，从而实现图形的绘制、组合、复制粘贴及撤回等操作，同时还负责文件的读写。
+* Main.java  
+程序的入口。
+```javascript
+public class Main extends Application {
 
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        DrawBoard drawBoard = new DrawBoard();
+        final Scene scene = new Scene(drawBoard, 300, 275, Color.WHITE);
+        drawBoard.loadBoard(primaryStage);
+        primaryStage.setScene(scene);
+        primaryStage.setTitle("Drawing");
+        primaryStage.show();
+    }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+}
+```
 ### 设计模式实现
 #### 简单工厂模式  
 我使用简单工厂模式对图形进行了构造，通过静态方法MyFactory对MyShape类及其子类对象进行实例化。客户端无须知道所创建的具体产品类的类名，只需要知道具体产品类所对应的参数即可。同时简化了代码实现，增强了代码的灵活度。
@@ -57,7 +86,7 @@ public class DrawBoard extends Group {
 }
 ```
 #### 组合模式  
-根据基础功能要求，除了实现圆形、三角形等基础图形，还需要对其进行组合，因此我采用了组合模式，将圆形、三角形等基础图形作为组合模式中的叶子对象，将组合图形作为容器对象，使客户端可以统一对待单个对象和组合对象
+根据基础功能要求，除了实现圆形、三角形等基础图形，还需要对其进行组合，因此我采用了组合模式，将圆形、三角形等基础图形作为组合模式中的叶子对象，将组合图形作为容器对象，使客户端可以统一对待单个对象和组合对象。
 
 * 抽象构件：MyShape.java
 ```javascript
@@ -100,7 +129,49 @@ public class MyUnion extends MyShape {
     }
 }
 ```
-#### 模式  
+#### 建造者模式  
+* 具体建造者类：TextBuilder.java
+```javascript
+public class TextBuilder {
+    MyText myText;
+
+    public TextBuilder() {
+        myText = new MyText();
+    }
+
+    public void buildFont() {
+        myText.setFont(Font.font(1));
+    }
+
+    public void buildText() {
+        myText.setString("一段话");
+    }
+
+    public void buildColor() {
+        myText.setColor(Color.RED);
+    }
+
+    public MyText builderText() {
+        buildColor();
+        buildFont();
+        buildText();
+        return myText;
+    }
+}
+```
+* 客户类代码片段：
+```javascript
+    //文字描述
+    public void addText(ToolBar toolBar) {
+        TextField text = new TextField();
+        TextBuilder builder=new TextBuilder();
+        MyText myText=builder.builderText();
+        text.setText(myText.getString());
+        //text.clear();
+        toolBar.getItems().add(new Label("文字描述："));
+        toolBar.getItems().add(text);
+    }
+```
 
 ## 实现功能介绍
 
@@ -123,3 +194,10 @@ public class MyUnion extends MyShape {
 * 支持图形（包括组合图形）的拖拽调整图形大小
 
 ## 界面展示
+* 运行源代码，出现一个小的窗口，此时需要放大至全屏，否则绘制图形位置不准确。
+
+
+
+
+
+
