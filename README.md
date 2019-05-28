@@ -10,8 +10,9 @@
 
 ### 设计模式
 * 简单工厂模式
-
+我使用简单工厂模式对图形进行了构造，通过静态方法MyFactory对MyShape类及其子类对象进行实例化。客户端无须知道所创建的具体产品类的类名，只需要知道具体产品类所对应的参数即可。同时简化了代码实现，增强了代码的灵活度。
 * 组合模式
+根据基础功能要求，除了实现圆形、三角形等基础图形，还需要对其进行组合，因此我采用了组合模式，将圆形、三角形等基础图形作为组合模式中的叶子对象，将组合图形作为容器对象，使客户端可以统一对待单个对象和组合对象
 * 模式
 
 ## 实现方案
@@ -22,8 +23,6 @@
 
 ### 设计模式实现
 #### 简单工厂模式  
-一开始
-
 * 静态工厂方法
 ```javascript
 public class MyFactory {
@@ -49,7 +48,7 @@ public class MyFactory {
 ```javascript
 public class DrawBoard extends Group {
     public void draw(String string, double x1, double y1, double x2, double y2, boolean flag) {
-        MyShape shape = MyFactory.createShape(string, x1, y1, x2, y2);
+        MyShape shape = MyFactory.createShape(string, x1, y1, x2, y2);//    通过工厂类创建产品对象
         //...
     }
 }
