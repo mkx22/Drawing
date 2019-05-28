@@ -263,85 +263,23 @@ public class DrawBoard extends Group {
     public void draw(String string, double x1, double y1, double x2, double y2, boolean flag) {
         System.out.print(" draw " + string + "\n");
 
-        if (string == "circle") {
-            MyCircle shape = new MyCircle(x1, y1, x2, y2);
-            if (flag) {
-                shape.setIndex(getIndex());
-                myshapes.add(shape);
-            }
+        MyShape shape = MyFactory.createShape(string, x1, y1, x2, y2);
+        if (flag) {
+            shape.setIndex(getIndex());
+            myshapes.add(shape);
+        }
+        if (string.equals("circle")||
+                string.equals("ellipse")||
+                string.equals("line")||
+                string.equals("rectangle")||
+                string.equals("triangle")) {
             Shape shape1 = shape.create(stroke);
             shapes.add(shape1);
             group.getChildren().add(shape1);
-        } else if (string == "circle2") {
-            MyCircle shape = new MyCircle(x1, y1, x2, y2);
-            if (flag) {
-                shape.setIndex(getIndex());
-                myshapes.add(shape);
-            }
-            Shape shape1 = shape.create1();
-            shapes.add(shape1);
-            group.getChildren().add(shape1);
-        } else if (string == "ellipse") {
-            MyEllipse shape = new MyEllipse(x1, y1, x2, y2);
-            if (flag) {
-                shape.setIndex(getIndex());
-                myshapes.add(shape);
-            }
-            Shape shape1 = shape.create(stroke);
-            shapes.add(shape1);
-            group.getChildren().add(shape1);
-        } else if (string == "ellipse2") {
-            MyEllipse shape = new MyEllipse(x1, y1, x2, y2);
-            if (flag) {
-                shape.setIndex(getIndex());
-                myshapes.add(shape);
-            }
-            Shape shape1 = shape.create1();
-            shapes.add(shape1);
-            group.getChildren().add(shape1);
-        } else if (string == "line") {
-            MyLine shape = new MyLine(x1, y1, x2, y2);
-            if (flag) {
-                shape.setIndex(getIndex());
-                myshapes.add(shape);
-            }
-            Shape shape1 = shape.create(stroke);
-            shapes.add(shape1);
-            group.getChildren().add(shape1);
-        } else if (string == "rectangle") {
-            MyRectangle shape = new MyRectangle(x1, y1, x2, y2);
-            if (flag) {
-                shape.setIndex(getIndex());
-                myshapes.add(shape);
-            }
-            Shape shape1 = shape.create(stroke);
-            shapes.add(shape1);
-            group.getChildren().add(shape1);
-        } else if (string == "rectangle3") {
-            MyRectangle shape = new MyRectangle(x1, y1, x2, y2);
-            if (flag) {
-                shape.setIndex(getIndex());
-                myshapes.add(shape);
-            }
-            Shape shape1 = shape.create1();
-            shapes.add(shape1);
-            group.getChildren().add(shape1);
-        } else if (string == "triangle") {
-            MyTriangle shape = new MyTriangle(x1, y1, x2, y2);
-            if (flag) {
-                shape.setIndex(getIndex());
-                myshapes.add(shape);
-            }
-            Shape shape1 = shape.create(stroke);
-            shapes.add(shape1);
-            group.getChildren().add(shape1);
-
-        } else if (string == "triangle2") {
-            MyTriangle shape = new MyTriangle(x1, y1, x2, y2);
-            if (flag) {
-                shape.setIndex(getIndex());
-                myshapes.add(shape);
-            }
+        } else if (string.equals("circle2")||
+                string.equals("ellipse2")||
+                string.equals("rectangle3")||
+                string.equals("triangle2")) {
             Shape shape1 = shape.create1();
             shapes.add(shape1);
             group.getChildren().add(shape1);
@@ -364,7 +302,7 @@ public class DrawBoard extends Group {
     //单击选中，拷贝复制
 
     Label label1 =new Label("选中成功！~\\(≧▽≦)/~");
-    Label label2 =new Label("没有选中图形！(>_<)——空心图形线条越细越难选中哦");
+    Label label2 =new Label("没有选中图形！(>_<)——空心图形请准确点击线条");
 
     //未组合时选中图形默认为上层图形
     public void copy() {

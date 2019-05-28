@@ -30,16 +30,17 @@ public class MyCircle extends MyShape {
         name = "circle";
     }
 
-    public double getCenterX() {
-        return centerX;
+    public void removeTmpshapes(MyShape myShape) {
+        //异常处理或错误提示
     }
 
-    public double getCenterY() {
-        return centerY;
+    public void addTmpshapes(MyShape myShape) {
+        //异常处理或错误提示
     }
 
-    public double getRadius() {
-        return radius;
+    public MyShape getChild(int i) {
+        //异常处理或错误提示
+        return null;
     }
 
     public Shape create(double stroke) {

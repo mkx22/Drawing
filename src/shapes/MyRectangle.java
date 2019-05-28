@@ -35,29 +35,17 @@ public class MyRectangle extends MyShape {
         name = "rectangle";
     }
 
-    public void setWidth(double w) {
-        width = w;
+    public void removeTmpshapes(MyShape myShape) {
+        //异常处理或错误提示
     }
 
-    public void setHeight(double h) {
-        height = h;
+    public void addTmpshapes(MyShape myShape) {
+        //异常处理或错误提示
     }
 
-    public double getWidth() {
-        return width;
-
-    }
-
-    public double getHeight() {
-        return height;
-    }
-
-    public double getFx() {
-        return fx;
-    }
-
-    public double getFy() {
-        return fy;
+    public MyShape getChild(int i) {
+        //异常处理或错误提示
+        return null;
     }
 
     public Shape create(double stroke) {

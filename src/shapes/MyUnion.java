@@ -5,9 +5,13 @@ import javafx.scene.shape.Shape;
 
 import java.util.ArrayList;
 
-public class MyUnion extends MyShape{
+public class MyUnion extends MyShape {
     private int index;
     ArrayList<MyShape> tmpshapes = new ArrayList<>();
+
+    public MyUnion() {
+
+    }
 
     public MyUnion(double x1, double y1, double x2, double y2) {
         startX = x1;
@@ -16,10 +20,28 @@ public class MyUnion extends MyShape{
         endY = y2;
         name = "union";
     }
-    public void addTmpshapes(MyShape myShape){
+
+    public Shape create(double stroke) {
+        return null;
+    }
+
+    public Shape create1() {
+        return null;
+    }
+
+    public void removeTmpshapes(MyShape myShape) {
+        tmpshapes.remove(myShape);
+    }
+
+    public void addTmpshapes(MyShape myShape) {
         tmpshapes.add(myShape);
     }
-    public ArrayList<MyShape> getTmpshapes(){
+
+    public MyShape getChild(int i) {
+        return (MyShape) tmpshapes.get(i);
+    }
+
+    public ArrayList<MyShape> getTmpshapes() {
         return tmpshapes;
     }
 }

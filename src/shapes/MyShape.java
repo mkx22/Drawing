@@ -3,7 +3,7 @@ package shapes;
 import javafx.scene.shape.*;
 
 //三角形、方框、圆形、椭圆、连接线
-public class MyShape {
+public abstract class MyShape {
     //鼠标记录开始坐标及结束坐标
     protected double startX;
     protected double startY;
@@ -31,13 +31,19 @@ public class MyShape {
         stroke = 2.0;
     }
 
+    public abstract void removeTmpshapes(MyShape myShape);
+    public abstract void addTmpshapes(MyShape myShape);
+    public abstract MyShape getChild(int i);
+
     //画图
-    public Shape create(double stroke) {
-        return null;
-    }
-    public Shape create1() {
-        return null;
-    }
+    public abstract Shape create(double stroke);
+//    {
+//        return null;
+//    }
+    public abstract Shape create1();
+//    {
+//        return null;
+//    }
 
     public double getStartX() {
         return startX;
@@ -59,33 +65,11 @@ public class MyShape {
         return name;
     }
 
-    public double getStroke() {
-        return stroke;
-    }
 
     public void setName(String name1) {
         name = name1;
     }
 
-    public void setStroke(double stroke1) {
-        stroke = stroke1;
-    }
-
-    public void setStartX(double x) {
-        startX = x;
-    }
-
-    public void setStartY(double y) {
-        startY = y;
-    }
-
-    public void setEndX(double x) {
-        endX = x;
-    }
-
-    public void setEndY(double y) {
-        endY = y;
-    }
 
     public void setIndex(int index1) {
         index = index1;

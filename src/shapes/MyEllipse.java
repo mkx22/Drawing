@@ -31,6 +31,19 @@ public class MyEllipse extends MyShape {
         name = "ellipse";
     }
 
+    public void removeTmpshapes(MyShape myShape) {
+        //异常处理或错误提示
+    }
+
+    public void addTmpshapes(MyShape myShape) {
+        //异常处理或错误提示
+    }
+
+    public MyShape getChild(int i) {
+        //异常处理或错误提示
+        return null;
+    }
+
     public double getCenterX() {
         return centerX;
     }

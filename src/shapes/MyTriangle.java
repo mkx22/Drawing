@@ -33,28 +33,17 @@ public class MyTriangle extends MyShape {
         name = "triangle";
     }
 
-    public double getX1() {
-        return x1;
+    public void removeTmpshapes(MyShape myShape) {
+        //异常处理或错误提示
     }
 
-    public double getX2() {
-        return x2;
+    public void addTmpshapes(MyShape myShape) {
+        //异常处理或错误提示
     }
 
-    public double getX3() {
-        return x3;
-    }
-
-    public double getY1() {
-        return y1;
-    }
-
-    public double getY2() {
-        return y2;
-    }
-
-    public double getY3() {
-        return y3;
+    public MyShape getChild(int i) {
+        //异常处理或错误提示
+        return null;
     }
 
     public Shape create(double stroke) {
